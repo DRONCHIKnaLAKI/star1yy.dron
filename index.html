@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Медиаплеер</title>
+    <title>Медиаплеер с сердечками</title>
     <style>
         body {
             display: flex;
@@ -12,11 +12,14 @@
             height: 100vh;
             background-color: black;
             flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
         video {
             width: 80%;
             max-width: 800px;
             display: none;
+            position: relative;
         }
         button {
             margin-top: 20px;
@@ -28,13 +31,44 @@
             background-color: #ff6600;
             color: white;
             transition: 0.3s;
+            position: relative;
+            z-index: 10;
         }
         button:hover {
             background-color: #ff4500;
         }
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 24px;
+            color: red;
+            animation: floatUp 5s linear infinite;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+        .love-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            color: white;
+            font-weight: bold;
+            display: none;
+            text-shadow: 2px 2px 10px red;
+        }
     </style>
 </head>
 <body>
+    <div class="love-text" id="loveText">Люблю тебя, солнышко ❤</div>
     <video id="video" controls>
         <source src="video.mp4" type="video/mp4">
         Ваш браузер не поддерживает видео.
@@ -42,7 +76,6 @@
     
     <audio id="audio">
         <source src="music.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает аудио.
     </audio>
     
     <button id="playButton">▶ Старт</button>
@@ -51,7 +84,7 @@
         const video = document.getElementById('video');
         const audio = document.getElementById('audio');
         const playButton = document.getElementById('playButton');
-        
+        const loveText = document.getElementById('loveText');
         let isPlaying = false;
 
         playButton.addEventListener('click', () => {
@@ -60,6 +93,8 @@
                 video.play();
                 audio.play();
                 playButton.textContent = '⏸ Стоп';
+                loveText.style.display = 'block';
+                setTimeout(() => loveText.style.display = 'none', 5000);
             } else {
                 video.pause();
                 audio.pause();
@@ -67,6 +102,17 @@
             }
             isPlaying = !isPlaying;
         });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 500);
     </script>
 </body>
 </html>
