@@ -3,38 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Автовоспроизведение Видео и Музыки</title>
+    <title>Медиаплеер</title>
     <style>
         body {
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: black;
+            flex-direction: column;
         }
         video {
-            width: 100%;
-            height: auto;
+            width: 80%;
+            max-width: 800px;
+            display: none;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff6600;
+            color: white;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #ff4500;
         }
     </style>
 </head>
 <body>
-    <video id="video" autoplay muted loop>
+    <video id="video" controls>
         <source src="video.mp4" type="video/mp4">
         Ваш браузер не поддерживает видео.
     </video>
     
-    <audio id="audio" autoplay loop>
+    <audio id="audio">
         <source src="music.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио.
     </audio>
     
+    <button id="playButton">▶ Старт</button>
+    
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('audio');
-            audio.muted = false;
-            audio.play().catch(error => console.log('Автозапуск аудио заблокирован браузером'));
+        const video = document.getElementById('video');
+        const audio = document.getElementById('audio');
+        const playButton = document.getElementById('playButton');
+        
+        let isPlaying = false;
+
+        playButton.addEventListener('click', () => {
+            if (!isPlaying) {
+                video.style.display = 'block';
+                video.play();
+                audio.play();
+                playButton.textContent = '⏸ Стоп';
+            } else {
+                video.pause();
+                audio.pause();
+                playButton.textContent = '▶ Старт';
+            }
+            isPlaying = !isPlaying;
         });
     </script>
 </body>
